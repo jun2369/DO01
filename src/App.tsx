@@ -1,5 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+// 添加类型声明，只解决编译错误
+declare global {
+  interface Window {
+    html2canvas?: any;
+    jspdf?: any;
+  }
+}
+
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'choice' | 'gemini'>('choice');
   const [isExpanded, setIsExpanded] = useState(true);
@@ -23,8 +31,8 @@ const App: React.FC = () => {
       
       
       await Promise.all([
-        new Promise(resolve => html2canvasScript.onload = resolve),
-        new Promise(resolve => jsPDFScript.onload = resolve)
+        new Promise<void>(resolve => { html2canvasScript.onload = () => resolve(); }),
+        new Promise<void>(resolve => { jsPDFScript.onload = () => resolve(); })
       ]);
       
       setScriptsLoaded(true);
@@ -116,33 +124,35 @@ const App: React.FC = () => {
       console.error('生成 PDF 时出错:', error);
       
       
-      const printWindow = window.open('', '_blank');
-      const printContent = printRef.current.innerHTML;
-      
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <title>${formData['MAWB'] || 'PTT'} Document</title>
-          <style>
-            body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
-            @media print {
-              body { -webkit-print-color-adjust: exact; }
-              @page { margin: 0.5in; }
-            }
-          </style>
-        </head>
-        <body>
-          ${printContent}
-        </body>
-        </html>
-      `);
-      
-      printWindow.document.close();
-      
-      setTimeout(() => {
-        printWindow.print();
-      }, 500);
+      const printWindow: Window | null = window.open('', '_blank');
+      if (printWindow) {
+        const printContent = printRef.current.innerHTML;
+        
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>${formData['MAWB'] || 'PTT'} Document</title>
+            <style>
+              body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+              @media print {
+                body { -webkit-print-color-adjust: exact; }
+                @page { margin: 0.5in; }
+              }
+            </style>
+          </head>
+          <body>
+            ${printContent}
+          </body>
+          </html>
+        `);
+        
+        printWindow.document.close();
+        
+        setTimeout(() => {
+          printWindow.print();
+        }, 500);
+      }
       
       alert('PDF生成失败，已打开打印窗口，请选择"另存为PDF"');
     }
@@ -900,4 +910,3 @@ const App: React.FC = () => {
 };
  
 export default App;
-              
