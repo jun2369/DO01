@@ -1,11 +1,37 @@
-import React, { useState, useRef } from 'react';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
- 
+import React, { useState, useRef, useEffect } from 'react';
+
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'choice' | 'gemini'>('choice');
   const [isExpanded, setIsExpanded] = useState(true);
+  const [scriptsLoaded, setScriptsLoaded] = useState(false);
   const printRef = useRef<HTMLDivElement>(null);
+
+  
+  useEffect(() => {
+    const loadScripts = async () => {
+      
+      const html2canvasScript = document.createElement('script');
+      html2canvasScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      
+      
+      const jsPDFScript = document.createElement('script');
+      jsPDFScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      
+      
+      document.head.appendChild(html2canvasScript);
+      document.head.appendChild(jsPDFScript);
+      
+      
+      await Promise.all([
+        new Promise(resolve => html2canvasScript.onload = resolve),
+        new Promise(resolve => jsPDFScript.onload = resolve)
+      ]);
+      
+      setScriptsLoaded(true);
+    };
+    
+    loadScripts();
+  }, []);
  
   const fields = [
     'Date',
@@ -22,8 +48,22 @@ const App: React.FC = () => {
     'Weight',
     'Consignor',
   ];
+
+  
+  const truckingOptions = ["AGI", "AZAZ", "BO", "FARO", "GEANTOS", "GLOBAL", "SCAL", "TOP SERVICE", "TRESPORT"];
+  const consignorOptions = ["SHEIN", "TEMU", "GIA", "TWTH", "CUPSHE", "4PX EXPRESS", "PRO CARRIER", "LIBERTY EXPRESS", "CNE EXPRESS", "FLYFLY", "FLYFLOW", "XINSHU", "WOOOLINK", "LANGZ INC.", "ZHONGSHU", "AGS SZX", "AGS PVG", "JS INTERNATIONAL"];
+  const fromOptions = ["AGI 1717", "AGI 513", "AGI 516", "AGI 836", "AGI 837", "AGI 838", "AIR GENERAL", "AMERICAN", "CHOICE", "FARO", "MAERSK", "NCA", "SWISSPORT", "WFS"];
  
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState<Record<string, string>>(() => {
+    
+    const now = new Date();
+    const cstDate = new Date(now.toLocaleString("en-US", {timeZone: "America/Chicago"}));
+    const defaultDate = cstDate.toISOString().split('T')[0]; // yyyy-mm-dd 格式
+    
+    return {
+      'Date': defaultDate
+    };
+  });
  
   const handleChange = (label: string, value: string) => {
     setFormData((prev) => ({ ...prev, [label]: value }));
@@ -41,9 +81,14 @@ const App: React.FC = () => {
 
     if (!printRef.current) return;
 
+    if (!scriptsLoaded) {
+      alert('PDF库正在加载中，请稍候再试');
+      return;
+    }
+
     try {
-      // 生成 PDF
-      const canvas = await html2canvas(printRef.current, {
+      
+      const canvas = await window.html2canvas(printRef.current, {
         scale: 2,
         logging: false,
         useCORS: true,
@@ -51,29 +96,88 @@ const App: React.FC = () => {
       });
       
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
+      const pdf = new window.jspdf.jsPDF({
         orientation: 'portrait',
         unit: 'in',
         format: 'letter'
       });
       
-      // 添加图片到 PDF
+      
       pdf.addImage(imgData, 'PNG', 0, 0, 8.5, 11);
       
-      // 使用 MAWB 作为文件名，如果没有输入 MAWB 则使用默认名称
+      
       const mawb = formData['MAWB'] || 'unnamed';
       const filename = `${mawb}_PTT.pdf`;
       
-      // 直接下载 PDF
+      
       pdf.save(filename);
+      
     } catch (error) {
       console.error('生成 PDF 时出错:', error);
-      alert('生成 PDF 失败，请重试');
+      
+      
+      const printWindow = window.open('', '_blank');
+      const printContent = printRef.current.innerHTML;
+      
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>${formData['MAWB'] || 'PTT'} Document</title>
+          <style>
+            body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+            @media print {
+              body { -webkit-print-color-adjust: exact; }
+              @page { margin: 0.5in; }
+            }
+          </style>
+        </head>
+        <body>
+          ${printContent}
+        </body>
+        </html>
+      `);
+      
+      printWindow.document.close();
+      
+      setTimeout(() => {
+        printWindow.print();
+      }, 500);
+      
+      alert('PDF生成失败，已打开打印窗口，请选择"另存为PDF"');
     }
+  };
+
+  const renderDropdownInput = (label: string, options: string[]) => {
+    return (
+      <div style={{ position: 'relative', flex: 1 }}>
+        <input
+          type="text"
+          value={formData[label] || ''}
+          onChange={(e) => handleChange(label, e.target.value)}
+          list={`${label}-options`}
+          style={{
+            width: '100%',
+            padding: '8px 12px',
+            border: '1px solid #ddd',
+            borderRadius: '4px',
+            fontSize: '14px',
+            transition: 'border-color 0.3s',
+          }}
+          onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+          onBlur={(e) => e.target.style.borderColor = '#ddd'}
+        />
+        <datalist id={`${label}-options`}>
+          {options.map((option, index) => (
+            <option key={index} value={option} />
+          ))}
+        </datalist>
+      </div>
+    );
   };
  
   const renderPrintContent = () => (
-    <div ref={printRef} className="print-content" style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+    <div ref={printRef} className="print-content" style={{ position: 'fixed', left: '-9999px', top: '0px', zIndex: -1000 }}>
       <div style={{
         width: '8.5in',
         height: '11in',
@@ -117,7 +221,7 @@ const App: React.FC = () => {
           <span style={{
             borderBottom: '2px solid #000',
             display: 'inline-block',
-            width: '250px',
+            width: '300px',
             textAlign: 'center',
             fontSize: '16px',
             height: '23px',
@@ -145,7 +249,7 @@ const App: React.FC = () => {
           <span style={{
             borderBottom: '2px solid #000',
             display: 'inline-block',
-            width: '250px',
+            width: '300px',
             textAlign: 'center',
             fontSize: '16px',
             height: '23px',
@@ -162,7 +266,7 @@ const App: React.FC = () => {
           <span style={{
             borderBottom: '2px solid #000',
             display: 'inline-block',
-            width: '250px',
+            width: '300px',
             textAlign: 'center',
             fontSize: '16px',
             height: '23px',
@@ -392,7 +496,7 @@ const App: React.FC = () => {
         <div style={{ 
           borderTop: '1px solid #000', 
           marginBottom: '10px',
-          marginTop: '25px' // 可选，进一步贴近上方
+          marginTop: '25px'
         }} />
  
  
@@ -523,7 +627,7 @@ const App: React.FC = () => {
     
     return (
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <h2 style={{ marginBottom: '30px', color: '#333' }}>填写 GEMINI PTT 表单信息</h2>
+        <h2 style={{ marginBottom: '30px', color: '#333' }}>GEMINI PTT INFO FORM</h2>
         
         {/* Render non-BUP fields first */}
         {nonBUPFields.slice(0, 4).map((label, idx) => (
@@ -540,21 +644,27 @@ const App: React.FC = () => {
               fontWeight: '500',
               color: '#555'
             }}>{label}:</label>
-            <input
-              type="text"
-              value={formData[label] || ''}
-              onChange={(e) => handleChange(label, e.target.value)}
-              style={{
-                flex: 1,
-                padding: '8px 12px',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                fontSize: '14px',
-                transition: 'border-color 0.3s',
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
-              onBlur={(e) => e.target.style.borderColor = '#ddd'}
-            />
+            {label === 'Trucking' ? (
+              renderDropdownInput(label, truckingOptions)
+            ) : label === 'From' ? (
+              renderDropdownInput(label, fromOptions)
+            ) : (
+              <input
+                type="text"
+                value={formData[label] || ''}
+                onChange={(e) => handleChange(label, e.target.value)}
+                style={{
+                  flex: 1,
+                  padding: '8px 12px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  fontSize: '14px',
+                  transition: 'border-color 0.3s',
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                onBlur={(e) => e.target.style.borderColor = '#ddd'}
+              />
+            )}
           </div>
         ))}
 
@@ -634,21 +744,25 @@ const App: React.FC = () => {
               fontWeight: '500',
               color: '#555'
             }}>{label}:</label>
-            <input
-              type="text"
-              value={formData[label] || ''}
-              onChange={(e) => handleChange(label, e.target.value)}
-              style={{
-                flex: 1,
-                padding: '8px 12px',
-                border: '1px solid #ddd',
-                borderRadius: '4px',
-                fontSize: '14px',
-                transition: 'border-color 0.3s',
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
-              onBlur={(e) => e.target.style.borderColor = '#ddd'}
-            />
+            {label === 'Consignor' ? (
+              renderDropdownInput(label, consignorOptions)
+            ) : (
+              <input
+                type="text"
+                value={formData[label] || ''}
+                onChange={(e) => handleChange(label, e.target.value)}
+                style={{
+                  flex: 1,
+                  padding: '8px 12px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  fontSize: '14px',
+                  transition: 'border-color 0.3s',
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
+                onBlur={(e) => e.target.style.borderColor = '#ddd'}
+              />
+            )}
           </div>
         ))}
 
@@ -662,15 +776,15 @@ const App: React.FC = () => {
             color: '#fff',
             border: 'none',
             borderRadius: '6px',
-            fontSize: '16px',
+            fontSize: '18px',
             fontWeight: '600',
             cursor: 'pointer',
             transition: 'background-color 0.3s',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4338ca'}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FF8C00'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#4f46e5'}
         >
-          Submit
+          SUBMIT
         </button>
         
         <button
@@ -683,12 +797,12 @@ const App: React.FC = () => {
             color: '#fff',
             border: 'none',
             borderRadius: '6px',
-            fontSize: '16px',
+            fontSize: '18px',
             fontWeight: '600',
             cursor: 'pointer',
             transition: 'background-color 0.3s',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4338ca'}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#FF8C00'}
           onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#4f46e5'}
         >
           RESET
@@ -696,7 +810,7 @@ const App: React.FC = () => {
         
         <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f3f4f6', borderRadius: '6px' }}>
           <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>
-            提示：点击"Submit"后直接下载PDF文件。
+            Note: Please click on "Submit" to export a PDF file.
           </p>
         </div>
       </div>
@@ -732,7 +846,7 @@ const App: React.FC = () => {
               userSelect: 'none'
             }}
           >
-            PTT 类型选择
+            PTT
             <span style={{
               display: 'inline-block',
               transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
@@ -786,3 +900,4 @@ const App: React.FC = () => {
 };
  
 export default App;
+              
