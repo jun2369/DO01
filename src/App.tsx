@@ -97,21 +97,24 @@ const App: React.FC = () => {
     try {
       
       const canvas = await window.html2canvas(printRef.current, {
-        scale: 2,
+        scale: 1,
         logging: false,
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        imageTimeout: 0,
+        removeContainer: true
       });
       
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL('image/jpeg', 0.99);
       const pdf = new window.jspdf.jsPDF({
         orientation: 'portrait',
         unit: 'in',
-        format: 'letter'
+        format: 'letter',
+        compress: true
       });
       
       
-      pdf.addImage(imgData, 'PNG', 0, 0, 8.5, 11);
+      pdf.addImage(imgData, 'JPEG', 0, 0, 8.5, 11);
       
       
       const mawb = formData['MAWB'] || 'unnamed';
@@ -721,7 +724,7 @@ const App: React.FC = () => {
                 color: '#555'
               }}>{`Cartons Count${num}:`}</label>
               <input
-                type="number"
+                type="text"
                 value={formData[`Cartons Count${num}`] || ''}
                 onChange={(e) => handleChange(`Cartons Count${num}`, e.target.value)}
                 style={{
@@ -738,6 +741,7 @@ const App: React.FC = () => {
             </div>
           </div>
         ))}
+
 
         {/* Render remaining fields */}
         {nonBUPFields.slice(4).map((label, idx) => (
