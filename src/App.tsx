@@ -59,7 +59,7 @@ const App: React.FC = () => {
 
   
   const truckingOptions = ["AGI", "AZAZ", "BO", "FARO", "GEANTOS", "GLOBAL", "SCAL", "TOP SERVICE", "TRESPORT"];
-  const consignorOptions = ["SHEIN", "TEMU", "GIA", "TWTH", "CUPSHE", "4PX EXPRESS", "PRO CARRIER", "LIBERTY EXPRESS", "CNE EXPRESS", "FLYFLY", "FLYFLOW", "XINSHU", "WOOOLINK", "LANGZ INC.", "ZHONGSHU", "AGS SZX", "AGS PVG", "JS INTERNATIONAL"];
+  const consignorOptions = ["SHEIN", "TEMU", "GIA", "TWTH", "CUPSHE", "4PX EXPRESS", "PRO CARRIER", "LIBERTY EXPRESS", "CNE EXPRESS", "FLYFLY", "FLYFLOW", "XINSHU", "WOOOLINK", "LANGZ INC.", "ZHONGSHU", "AGS SZX", "AGS PVG", "JS INTERNATIONAL", "EVERGLORY"];
   const fromOptions = ["AGI 1717", "AGI 513", "AGI 516", "AGI 836", "AGI 837", "AGI 838", "AIR GENERAL", "AMERICAN", "CHOICE", "FARO", "MAERSK", "NCA", "SWISSPORT", "WFS"];
  
   const [formData, setFormData] = useState<Record<string, string>>(() => {
