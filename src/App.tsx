@@ -52,7 +52,7 @@ const App: React.FC = () => {
     };
     
     setPdfHistory(prev => {
-      const updated = [newItem, ...prev].slice(0, 10); // 保留最近10个
+      const updated = [newItem, ...prev].slice(0, 20); // 保留最近10个
       try {
         localStorage.setItem('pdfHistory', JSON.stringify(updated));
       } catch (e) {
@@ -409,7 +409,8 @@ const App: React.FC = () => {
                 textAlign: 'center',
                 fontSize: '12px',
                 fontWeight: 'bold',
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                color: '#000'
               }}>ULD TYPE & NO</th>
               <th style={{
                 border: '1px solid #000',
@@ -417,7 +418,8 @@ const App: React.FC = () => {
                 textAlign: 'center',
                 fontSize: '12px',
                 fontWeight: 'bold',
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                color: '#000'
               }}>NO. OF PCS</th>
               <th style={{
                 border: '1px solid #000',
@@ -426,6 +428,7 @@ const App: React.FC = () => {
                 fontSize: '12px',
                 fontWeight: 'bold',
                 backgroundColor: '#fff',
+                color: '#000',
                 width: '100px'
               }}>CARRIER &<br />FLT NO.</th>
               <th style={{
@@ -435,6 +438,7 @@ const App: React.FC = () => {
                 fontSize: '12px',
                 fontWeight: 'bold',
                 backgroundColor: '#fff',
+                color: '#000',
                 width: '180px'
               }}>AWB NO.</th>
               <th style={{
@@ -443,7 +447,8 @@ const App: React.FC = () => {
                 textAlign: 'center',
                 fontSize: '12px',
                 fontWeight: 'bold',
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                color: '#000'
               }}>WEIGHT</th>
               <th style={{
                 border: '1px solid #000',
@@ -451,7 +456,8 @@ const App: React.FC = () => {
                 textAlign: 'center',
                 fontSize: '12px',
                 fontWeight: 'bold',
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                color: '#000'
               }}>CONSIGNOR</th>
             </tr>
           </thead>
@@ -463,7 +469,9 @@ const App: React.FC = () => {
                 padding: '6px', 
                 textAlign: 'center',
                 height: '35px',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {cesFormData['BUP Info1'] || ''}
               </td>
@@ -471,7 +479,9 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {cesFormData['Cartons Count1'] || ''}
               </td>
@@ -479,7 +489,9 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {cesFormData['Flight No'] || ''}
               </td>
@@ -487,7 +499,9 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {cesFormData['MAWB'] || ''}
               </td>
@@ -495,7 +509,9 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {cesFormData['Weight'] || ''}
               </td>
@@ -503,7 +519,9 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {cesFormData['Consignor'] || ''}
               </td>
@@ -515,7 +533,9 @@ const App: React.FC = () => {
                 padding: '6px', 
                 textAlign: 'center',
                 height: '35px',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {cesFormData['BUP Info2'] || ''}
               </td>
@@ -523,14 +543,16 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {cesFormData['Cartons Count2'] || ''}
               </td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
             </tr>
             {/* Third row - BUP Info3 data */}
             <tr>
@@ -539,7 +561,9 @@ const App: React.FC = () => {
                 padding: '6px', 
                 textAlign: 'center',
                 height: '35px',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {cesFormData['BUP Info3'] || ''}
               </td>
@@ -547,23 +571,25 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {cesFormData['Cartons Count3'] || ''}
               </td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
             </tr>
             {/* Fourth empty row */}
             <tr>
-              <td style={{ border: '1px solid #000', padding: '6px', height: '35px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', height: '35px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
             </tr>
           </tbody>
         </table>
@@ -856,7 +882,8 @@ const App: React.FC = () => {
                 textAlign: 'center',
                 fontSize: '12px',
                 fontWeight: 'bold',
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                color: '#000'
               }}>ULD TYPE & NO</th>
               <th style={{
                 border: '1px solid #000',
@@ -864,7 +891,8 @@ const App: React.FC = () => {
                 textAlign: 'center',
                 fontSize: '12px',
                 fontWeight: 'bold',
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                color: '#000'
               }}>NO. OF PCS</th>
               <th style={{
                 border: '1px solid #000',
@@ -873,6 +901,7 @@ const App: React.FC = () => {
                 fontSize: '12px',
                 fontWeight: 'bold',
                 backgroundColor: '#fff',
+                color: '#000',
                 width: '100px'
               }}>CARRIER &<br />FLT NO.</th>
               <th style={{
@@ -882,6 +911,7 @@ const App: React.FC = () => {
                 fontSize: '12px',
                 fontWeight: 'bold',
                 backgroundColor: '#fff',
+                color: '#000',
                 width: '180px'
               }}>AWB NO.</th>
               <th style={{
@@ -890,7 +920,8 @@ const App: React.FC = () => {
                 textAlign: 'center',
                 fontSize: '12px',
                 fontWeight: 'bold',
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                color: '#000'
               }}>WEIGHT</th>
               <th style={{
                 border: '1px solid #000',
@@ -898,7 +929,8 @@ const App: React.FC = () => {
                 textAlign: 'center',
                 fontSize: '12px',
                 fontWeight: 'bold',
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                color: '#000'
               }}>CONSIGNOR</th>
             </tr>
           </thead>
@@ -910,7 +942,9 @@ const App: React.FC = () => {
                 padding: '6px', 
                 textAlign: 'center',
                 height: '35px',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {formData['BUP Info1'] || ''}
               </td>
@@ -918,7 +952,9 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {formData['Cartons Count1'] || ''}
               </td>
@@ -926,7 +962,9 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {formData['Flight No'] || ''}
               </td>
@@ -934,7 +972,9 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {formData['MAWB'] || ''}
               </td>
@@ -942,7 +982,9 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {formData['Weight'] || ''}
               </td>
@@ -950,7 +992,9 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {formData['Consignor'] || ''}
               </td>
@@ -962,7 +1006,9 @@ const App: React.FC = () => {
                 padding: '6px', 
                 textAlign: 'center',
                 height: '35px',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {formData['BUP Info2'] || ''}
               </td>
@@ -970,14 +1016,16 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {formData['Cartons Count2'] || ''}
               </td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
             </tr>
             {/* Third row - BUP Info3 data */}
             <tr>
@@ -986,7 +1034,9 @@ const App: React.FC = () => {
                 padding: '6px', 
                 textAlign: 'center',
                 height: '35px',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {formData['BUP Info3'] || ''}
               </td>
@@ -994,23 +1044,25 @@ const App: React.FC = () => {
                 border: '1px solid #000', 
                 padding: '6px', 
                 textAlign: 'center',
-                fontSize: '16px'
+                fontSize: '16px',
+                color: '#000',
+                backgroundColor: '#fff'
               }}>
                 {formData['Cartons Count3'] || ''}
               </td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
             </tr>
             {/* Fourth empty row */}
             <tr>
-              <td style={{ border: '1px solid #000', padding: '6px', height: '35px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
-              <td style={{ border: '1px solid #000', padding: '6px' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', height: '35px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
+              <td style={{ border: '1px solid #000', padding: '6px', backgroundColor: '#fff' }}>&nbsp;</td>
             </tr>
           </tbody>
         </table>
@@ -1558,8 +1610,9 @@ const App: React.FC = () => {
   };
  
   const menuItems = [
-    { key: 'CES', label: 'CES PTT' },
+    
     { key: 'gemini', label: 'GEMINI PTT' },
+    { key: 'CES', label: 'CES PTT' }
   ];
  
   return (
@@ -1645,7 +1698,7 @@ const App: React.FC = () => {
             borderBottom: '2px solid #4f46e5',
             paddingBottom: '10px'
           }}>
-            📄 PDF History (Recent 10)
+            📄 PDF History (Recent 20)
           </h3>
           
           {pdfHistory.length === 0 ? (
